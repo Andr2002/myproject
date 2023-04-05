@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { Pool } = require('pg');
-const isProduction = process.env.NODE_ENV === 'production'; //  чтобы .env-файл не был виден на сервере
-const connectionString = `postgresql://${process.env.USER}:${process.env.PASSWORD}@${process.env.HOST}:${process.env.PORT}/${process.env.DATABASE}`; //  для проверки, если в продакшне, то брать данные из env, иначе подклбчается по этому запросу
+const isProduction = process.env.NODE_ENV === 'production';
+const connectionString = `postgresql://${process.env.USER}:${process.env.PASSWORD}@${process.env.HOST}:${process.env.PORT}/${process.env.DATABASE}`;
 
 const pool = new Pool({
     user: process.env.USER,
@@ -10,21 +10,17 @@ const pool = new Pool({
     password: process.env.PASSWORD
 });
 
-// const pool = new Pool({
-//     connectionString: isProduction ? process.env.DATABASE_URL : connectionString
-// })
-
 async function userExist(login, password) {
     return new Promise((resolve, reject) => {
-            let sql = `select * from "user" where login='${login}' and "password"='${password}'`; //  получаем строку из бд
+            let sql = `select * from "user" where login='${login}' and "password"='${password}'`; 
 
             pool.query(sql, (err, res) => {
                 if (err) reject('[userExist] error in: ' + err.message);
-                resolve(res); //  возвращаем result
+                resolve(res); 
             });
         })
         .then((res) => {
-            if (res.rowCount > 0) //  если запись в бд есть
+            if (res.rowCount > 0) 
             {
                 return {
                     exist: true,
@@ -61,7 +57,7 @@ async function saveSessionId(user_id, session_id, response) {
             let sql = `insert into "session"(id_emp, id_session) values(${user_id}, '${session_id}')`;
 
             pool.query(sql, (err, result) => {
-                if (err && err.code == '23505') reject('[saveSessionId] пользователь уже вошел в систему'); //  код повторяющегося значения в базе
+                if (err && err.code == '23505') reject('[saveSessionId] пользователь уже вошел в систему');
 
                 if (err) reject('[saveSessionId] error in: ' + err.message);
 
@@ -79,7 +75,7 @@ async function existSessionId(user_id) {
             pool.query(sql, (err, result) => {
                 if (err) reject('[existSessionId] error in: ' + err.message);
 
-                resolve(result.rowCount !== 0); // если > 0, значит запись есть
+                resolve(result.rowCount !== 0); 
             });
         })
         .then((res) => { return res; })
