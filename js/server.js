@@ -1,4 +1,3 @@
-//  type = commonjs
 require('dotenv').config();
 const express = require('express');
 const http = require('http');
@@ -15,13 +14,13 @@ initialize(passport);
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.set('view engine', 'ejs'); //  for ejs
+app.set('view engine', 'ejs'); 
 
-const urlencodedParser = express.urlencoded({ extended: false }); // чтобы брать данные из форм
+const urlencodedParser = express.urlencoded({ extended: false }); 
 
-app.use(express.static(__dirname.slice(0, -3))); //  для того, чтобы отображались стили (каталог, где находимся, когда загружается страницы)
-app.use(express.json()); //  для того, чтобы парсить json, который будет прилетать в запросах
-app.use(cookieParser()); //  для того, чтобы парсить куки
+app.use(express.static(__dirname.slice(0, -3)));
+app.use(express.json()); 
+app.use(cookieParser()); 
 
 app.use(session({
     secret: 'secret_key',
@@ -30,20 +29,18 @@ app.use(session({
     cookie: { secure: true }
 }));
 
-//  ПЕРЕВЕСТИ ВСЕ НА ejs
-
-app.use(passport.initialize()); //  for passport
-app.use(passport.session()); //  for passport
+app.use(passport.initialize()); 
+app.use(passport.session()); 
 
 app.use(flash());
 
 app.get('/', (request, response) => {
-    response.render('index', { user: 'andrey' }); // название_файла.ejs
+    response.render('index', { user: 'andrey' }); 
 });
 
 app.get('/login', (request, response) => {
     // response.sendFile(__dirname.slice(0, -3) + "/html/login.html");
-    response.render('login'); // название_файла.ejs
+    response.render('login'); 
 });
 
 app.post('/login', passport.authenticate('local', {
@@ -60,14 +57,14 @@ app.get('/me', (request, response) => {
 });
 
 // app.post('/login', urlencodedParser, async(request, response) => {
-//     if (!request.body) return response.sendStatus(400); //  если данных нет
+//     if (!request.body) return response.sendStatus(400); 
 
-//     let login = request.body.login.trim(); //  логин из формы
-//     let password = request.body.password.trim(); //  пароль из формы
+//     let login = request.body.login.trim(); 
+//     let password = request.body.password.trim();
 
-//     let userExistData = await userExist(login, password); //  проверка на существование user
+//     let userExistData = await userExist(login, password); 
 
-//     if (userExistData.exist) { //  если юзер есть
+//     if (userExistData.exist) { 
 //         let user = await getUser(userExistData.user_id);
 
 //         console.log(await existSessionId(user.id));
@@ -75,15 +72,11 @@ app.get('/me', (request, response) => {
 //         await saveSessionId(user.id, request.sessionID);
 
 //         request.flash('success');
-//         response.redirect(301, `/me?id=${user.id}`); //  переадресация и передача данных
+//         response.redirect(301, `/me?id=${user.id}`);
 //     } else console.log('user does not exist');
 // });
 
 // app.get('/me', async(request, response) => {
-//     let user = await getUser(request.query.id);
-//     let role = await getRoleById(request.query.id);
-//     let dept = await getDeptById(user.id_dept);
-
 //     response.send(
 //         `<h3>User</h3>` +
 //         `<p>Role: ${role}</p>` +
@@ -101,7 +94,3 @@ const server = http.createServer(app);
 server.listen(port, () => {
     console.log(`[server] started on port ${port}`);
 });
-
-// запрос на добавление в таблицу employee
-//insert into employee(id, surname, "name", patronymic, post, phone, email, archive,id_dept) 
-//values(550040, 'Скляров','Андрей','Эльшанович','техник','3-19-79','saye@docs.mayak.ru',false, 1)
