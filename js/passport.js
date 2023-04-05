@@ -1,6 +1,6 @@
 const localStrategy = require('passport-local').Strategy;
 const passport = require('passport');
-const bcrypt = require('bcrypt'); // для хэширования пароля
+const bcrypt = require('bcrypt');
 const { Pool } = require('pg');
 require('dotenv').config();
 
@@ -22,22 +22,6 @@ function initialize(passport) {
             if (result.rows[0] > 0) {
                 return done(null, user);
             } else return done(null, false, { message: 'Неправильный пароль или имя пользователя' });
-
-            // if (result.rows > 0) {
-            //     const user = result.rows[0];
-            //     console.log(user)
-            //     bcrypt.compare(password, user.password, (err, isMatch) => { //  расхэширование пароля
-            //         if (err) throw err;
-
-            //         if (isMatch) {
-            //             return done(null, user);
-            //         } else {
-            //             return done(null, false, { message: 'Неправильный пароль!' });
-            //         }
-            //     });
-            // } else {
-            //     return done(null, false, { message: 'Пользователя с данным логином нет в системе!' });
-            // }
         });
     }
 
