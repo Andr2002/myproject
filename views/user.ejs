@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои заявки</title>
+
+    <link rel="stylesheet" href="../css/user.css">
+    <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+
+    <div class="user-modal">
+        <div class="user-profile">
+            <img src="../img/close-logo.png" alt="close-logo" class="close-logo" draggable="false" title="Закрыть окно профиля">
+
+            <img src="../img/<%= user.role %>-logo.png" alt="<%= user.role %>-logo" class="profile-logo" draggable="false">
+
+            <p class="profile-info">Роль: <span><%= correctRole(user.role) %></span></p>
+
+            <p class="profile-info">Фамилия: <span><%= correctOutput(user.surname) %></span></p>
+
+            <p class="profile-info">Имя: <span><%= correctOutput(user.name) %></span></p>
+
+            <p class="profile-info">Отчество: <span><%= correctOutput(user.patronymic) %></span></p>
+
+            <p class="profile-info">Должность: <span><%= user.post %></span></p>
+
+            <p class="profile-info">Подразделение: <span><%= user.dept.full_name %></span></p>
+
+            <p class="profile-info">Телефон: <span><%= user.phone %></span></p>
+
+            <p class="profile-info">Электронная почта: <span><%= user.email%></span></p>
+
+            <button class="profile-exit-btn" title="Выйти из системы">Выйти из системы</button>
+        </div>
+    </div>
+
+    <div class="user-info">
+        <div class="user-title">
+            <img src="../img/<%= user.role %>-logo.png" alt="<%= user.role %>-logo" class="user-logo" draggable="false" title="Информация о профиле">
+
+            <span class="user-name"><%= correctOutput(user.surname) + ' ' + correctOutput(user.name) + ' ' + correctOutput(user.patronymic) %></span>
+        </div>
+
+        <button class="exit-btn" title="Выйти из системы">Выйти из системы</button>
+    </div>
+
+    <!-- функция для корректного отображения роли -->
+    <% function correctRole(role) { %>
+        <% if(role == 'admin') return 'Администратор'; %>
+            <% return 'Пользователь'; %>
+                <% } %>
+
+                    <!-- функция для корректного отображения слов с заглавной буквы -->
+                    <% function correctOutput(word) { %>
+                        <% return word[0].toUpperCase() + word.substr(1, word.length-1); %>
+                            <% } %>
+
+                                <% if(request.status == 0) { %>
+                                    <div class="not-request">
+                                        <h1>Заявок не найдено</h1>
+                                        <img src="../img/not-request-logo.png" alt="not-request-logo" draggable="false">
+                                    </div>
+
+                                    <% } else { %>
+
+                                        <table>
+                                            <caption>Все заявки</caption>
+
+                                            <tr>
+                                                <th>Номер</th>
+                                                <th>Дата</th>
+                                                <th>Год</th>
+                                                <th>Документ</th>
+                                                <th>Статус</th>
+                                                <th>Вид</th>
+                                                <th>Примечание</th>
+                                            </tr>
+
+                                            <% for(let i in request){ %>
+                                                <tr>
+                                                    <!-- номер документа -->
+                                                    <td>
+                                                        <%= request[i].reg_number %>
+                                                    </td>
+
+                                                    <!-- дата -->
+                                                    <td>
+                                                        <%= new Date(request[i].reg_date).toLocaleDateString() %>
+                                                    </td>
+
+                                                    <!-- год -->
+                                                    <td>
+                                                        <%= request[i].year %>
+                                                    </td>
+
+                                                    <!-- ссылка на док. -->
+                                                    <td>
+                                                        <a href="<%= request[i].file_path %>" download>просмотр</a>
+                                                    </td>
+
+                                                    <!-- статус исполнения заявки -->
+                                                    <td>
+                                                        <%= request[i].status %>
+                                                    </td>
+
+                                                    <!-- вид -->
+                                                    <td>
+                                                        <%= request[i].type %>
+                                                    </td>
+
+                                                    <!-- примечание -->
+                                                    <td>
+                                                        <%= request[i].note %>
+                                                    </td>
+                                                </tr>
+
+                                                <% } %>
+
+                                        </table>
+
+                                        <% } %>
+
+                                            <button class="create-btn" title="Создать заявку">Создать</button>
+
+                                            <script src="../js/user.js"></script>
+</body>
+
+</html>

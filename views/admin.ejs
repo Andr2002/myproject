@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Все заявки</title>
+
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+    <form method="post" action="/update-req-pos" class="modal">
+        <div class="detailing">
+
+            <div class="request-info">
+
+                <p>Номер: <input type="text" name="reg_number" class="info-number" disabled> </p>
+                <p>Подразделение: <span class="info-dept"></span></p>
+                <p>Ответственный: <span class="info-responsible"></span></p>
+                <p>Телефон: <span class="info-phone"></span></p>
+                <p>Год приобретения: <span class="info-year"></span></p>
+                <p>Дата: <span class="info-date"></span></p>
+                <p>Статус:
+                    <select name="req_status" id="" class="info-status">
+                        <option value="новая">новая</option>
+                        <option value="введена">введена</option>
+                        <option value="готова">готова</option>
+                    </select></p>
+                <p>Примечание: <textarea name="req_note" class="info-note" id="" cols="10" rows="1"></textarea></p>
+
+                <!-- если pdf, то откроется в новой вкладке, а если docx, то скачается -->
+                <a class="info-file" target="_blank">скан</a>
+                <!-- <a class="info-file" download>скан</a> -->
+            </div>
+
+            <p class="table-caption">Детализация заявки</p>
+            <table class="table-detailing">
+                <tr class="tr-detailing">
+                    <td class="td-detailing">Позиция</td>
+                    <td class="td-detailing">Наименование</td>
+                    <td class="td-detailing">Модель</td>
+                    <td class="td-detailing">Версия</td>
+                    <td class="td-detailing">Количество</td>
+                    <td class="td-detailing">Количество утв.</td>
+                    <td class="td-detailing">Цена</td>
+                    <td class="td-detailing">Категория</td>
+                    <td class="td-detailing">Примечание</td>
+                    <td class="td-detailing">Принято</td>
+                </tr>
+            </table>
+
+            <div class="buttons">
+                <input type="button" value="Сохранить" id="save-btn" onclick="sendReqPosForUpdate()" class="save-btn">
+
+                <input type="button" value="Отмена" id="cancel-btn">
+
+                <input type="button" value="Удалить" id="delete-btn" onclick="deleteRequest()">
+            </div>
+
+            <a href="#" class="excel-link">выгрузка в excel</a>
+        </div>
+    </form>
+
+    <div class="user-modal">
+        <div class="user-profile">
+            <img src="../img/close-logo.png" alt="close-logo" class="close-logo" draggable="false" title="Закрыть окно профиля">
+
+            <img src="../img/<%= user.role %>-logo.png" alt="<%= user.role %>-logo" class="profile-logo" draggable="false">
+
+            <p class="profile-info">Роль: <span><%= correctRole(user.role) %></span></p>
+
+            <p class="profile-info">Фамилия: <span><%= correctOutput(user.surname) %></span></p>
+
+            <p class="profile-info">Имя: <span><%= correctOutput(user.name) %></span></p>
+
+            <p class="profile-info">Отчество: <span><%= correctOutput(user.patronymic) %></span></p>
+
+            <p class="profile-info">Должность: <span><%= user.post %></span></p>
+
+            <p class="profile-info">Подразделение: <span><%= user.dept.full_name %></span></p>
+
+            <p class="profile-info">Телефон: <span><%= user.phone %></span></p>
+
+            <p class="profile-info">Электронная почта: <span><%= user.email%></span></p>
+
+            <button class="profile-exit-btn" title="Выйти из системы">Выйти из системы</button>
+        </div>
+    </div>
+
+    <div class="header">
+        <div class="admin-year">
+            <form action="/get-session-id" type="post">
+                <select name="year" id="" class="select-year">
+                    <option value="2023">2023</option>
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>
+                    <option value="2026">2026</option>
+                    <option value="2027">2027</option>
+                    <option value="2028">2028</option>
+                    <option value="2029">2029</option>
+                    <option value="2030">2030</option>
+                </select>
+                <button type="submit" class="show-btn">Показать</button>
+            </form>
+        </div>
+
+        <div class="user-info">
+            <img src="../img/<%= user.role %>-logo.png" alt="<%= user.role %>-logo" class="user-logo" draggable="false" title="Информация о профиле">
+
+            <span class="user-name"><%= correctOutput(user.surname) + ' ' + correctOutput(user.name) + ' ' + correctOutput(user.patronymic) %></span>
+        </div>
+
+        <button class="exit-btn">Выйти из системы</button>
+    </div>
+
+    <% function correctRole(role) { %>
+        <% if(role == 'admin') return 'Администратор'; %>
+            <% return 'Пользователь'; %>
+                <% } %>
+
+                    <!-- функция для корректного отображения слов с заглавной буквы -->
+                    <% function correctOutput(word) { %>
+                        <% return word[0].toUpperCase() + word.substr(1, word.length-1); %>
+                            <% } %>
+
+                                <% if(request.status == 0) { %>
+                                    <div class="not-request">
+                                        <h1>Заявок не найдено</h1>
+                                        <img src="../img/not-request-logo.png" alt="" draggable="false">
+                                    </div>
+
+                                    <% } else{ %>
+
+                                        <table class="requests">
+                                            <caption class="caption-req">Все заявки</caption>
+
+                                            <tr>
+                                                <th><img src="../img/edit-main.png" alt="edit-main" class="edit-main"></th>
+                                                <th>Номер</th>
+                                                <th>Дата</th>
+                                                <th>Подразделение</th>
+                                                <th>Ответственный</th>
+                                                <th>Телефон</th>
+                                                <th>Год</th>
+                                                <th>Документ</th>
+                                                <th>Статус</th>
+                                                <th>Вид</th>
+                                                <th>Сумма</th>
+                                                <th>Примечание</th>
+                                            </tr>
+                                            <% for(let i in request){ %>
+
+                                                <tr>
+                                                    <!-- edit -->
+                                                    <td>
+                                                        <div class="edit">
+                                                            <img src="../img/edit-logo.png" alt="edit-logo" class="edit-logo" draggable="false">
+                                                        </div>
+                                                    </td>
+
+                                                    <!-- номер документа -->
+                                                    <td>
+                                                        <div class="">
+                                                            <%= request[i].reg_number %>
+                                                        </div>
+                                                    </td>
+
+                                                    <!-- дата -->
+                                                    <td>
+                                                        <%= new Date(request[i].reg_date).toLocaleDateString() %>
+                                                    </td>
+
+                                                    <!-- подразделение -->
+                                                    <td>
+                                                        <%= correctOutput(request[i].dept_short_name) %>
+                                                    </td>
+
+                                                    <!-- ответственный -->
+                                                    <td>
+                                                        <%= correctOutput(request[i].emp_surname) + ' ' + correctOutput(request[i].emp_name) + ' ' + correctOutput(request[i].emp_patronymic) %>
+                                                    </td>
+
+                                                    <!-- телефон отв. -->
+                                                    <td>
+                                                        <%= request[i].emp_phone%>
+                                                    </td>
+
+                                                    <!-- год -->
+                                                    <td>
+                                                        <%= request[i].year %>
+                                                    </td>
+
+                                                    <!-- ссылка на док. -->
+                                                    <td>
+                                                        <!-- <a href="<%= request[i].file_path %>" download>просмотр</a> -->
+                                                        <a href="<%= request[i].file_path %>" target="_blank">просмотр</a>
+                                                    </td>
+
+                                                    <!-- статус исполнения заявки -->
+                                                    <td>
+                                                        <%= request[i].status%>
+                                                    </td>
+
+                                                    <!-- вид -->
+                                                    <td>
+                                                        <%= request[i].type %>
+                                                    </td>
+
+                                                    <!-- сумма -->
+                                                    <td>
+                                                        <%= request[i].total_price %> ₽
+                                                    </td>
+
+                                                    <!-- примечание -->
+                                                    <td>
+                                                        <%= request[i].note %>
+                                                    </td>
+                                                </tr>
+
+                                                <% } %>
+                                        </table>
+
+                                        <% } %>
+
+                                            <button class="create-btn">Создать</button>
+
+                                            <script>
+                                                document.addEventListener('DOMContentLoaded', () => {
+                                                    let selected_year = new URLSearchParams(window.location.search).get('year');
+
+                                                    for (let i = 0; i < document.querySelector('.select-year').children.length; i++) {
+                                                        if (document.querySelector('.select-year').children[i].value == selected_year) {
+                                                            document.querySelector('.select-year').selectedIndex = document.querySelector('.select-year').children[i].index;
+                                                        }
+                                                    }
+
+                                                    console.log(selected_year);
+
+                                                    let edits = document.querySelectorAll('.edit-logo');
+
+                                                    edits.forEach(edit => {
+                                                        edit.addEventListener('click', async() => {
+                                                            if (edit.style.transform == 'rotate(-90deg)') { //  если заявка открыта, то закрыть ее
+                                                                edit.style.transform = 'rotate(0deg)';
+                                                                document.querySelector('.modal').style.display = 'none';
+
+                                                            } else {
+                                                                positionOutput();
+
+                                                                document.querySelector('.excel-link').addEventListener('click', () => {
+                                                                    var table2excel = new Table2Excel(); //  детализация в excel
+                                                                    table2excel.export(document.querySelectorAll("table.table-detailing")); //  детализация в excel
+                                                                });
+
+                                                                function positionOutput() {
+                                                                    fetch(`/get-request?reg_number=${edit.parentNode.parentNode.parentNode.children[1].textContent.trim()}`) //  получение данные с сервера
+                                                                        .then((response) => {
+                                                                            return response.json(); //  ответ от сервера
+                                                                        })
+                                                                        .then((data) => {
+                                                                            if (data.status != 1) {
+                                                                                alert('error');
+                                                                                return;
+                                                                            }
+
+                                                                            for (let i in data.positions) {
+                                                                                let checked = ''; //  false                                                
+                                                                                if (data.positions[i].refusal) checked = 'checked';
+
+                                                                                document.querySelector('.table-detailing').insertAdjacentHTML('beforeend',
+                                                                                    `
+                                                                <tr>
+                                                                    <td>
+                                                                        <data class="detailing-pos" id="${data.positions[i].id}">${Number(i) + 1}</data>
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <textarea name="company" id="" cols="11" rows="1" class="req-pos-company">${data.positions[i].company}</textarea>
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <textarea name="model" id="" cols="11" rows="1" class="req-pos-model">${data.positions[i].model}</textarea>
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <textarea name="version" id="" cols="5" rows="1" class="req-pos-version">${data.positions[i].version}</textarea>
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <textarea name="count" id="" cols="3" rows="1" class="req-pos-count">${data.positions[i].count}</textarea>
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <textarea name="count_r" id="" cols="3" rows="1" class="req-pos-count_r">${data.positions[i].count_r}</textarea>
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <textarea name="price" id="" cols="6" rows="1" class="req-pos-price">${data.positions[i].price}</textarea>
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <!-- <span>${data.positions[i].category}</span> -->
+                                                                        <select name="category" id="" class="category-list"></select>
+                                                                        <!-- <textarea name="category" id="" cols="7" rows="1">категория</textarea> -->
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <textarea name="note" id="" cols="11" rows="1">${data.positions[i].note}</textarea>
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <input type="checkbox" name="refusal" id="" ${checked} class="checkbox">                                                                         
+                                                                    </td>
+                                                                </tr>
+                                                                `);
+                                                                            }
+
+                                                                            document.querySelector('.table-detailing').insertAdjacentHTML('beforeend',
+                                                                                `
+                                                            <tr>
+                                                                <td colspan="9"><b>Итоговая сумма:</b></td>
+                                                                <td class="total_price"><b>${correctData(data.request.total_price)} ₽</b></td>
+                                                            </tr>
+                                                            `
+                                                                            );
+
+                                                                            document.querySelector('.info-number').value = data.request.reg_number;
+                                                                            document.querySelector('.info-dept').innerHTML = data.responsible.dept.full_name;
+                                                                            document.querySelector('.info-responsible').innerHTML = getFullName(data.responsible);
+                                                                            document.querySelector('.info-phone').innerHTML = data.responsible.phone;
+                                                                            document.querySelector('.info-year').innerHTML = data.request.year;
+                                                                            document.querySelector('.info-date').innerHTML = new Date(data.request.reg_date).toLocaleDateString();
+                                                                            document.querySelector('.info-status')[getStatusIndex(data.request.status)].selected = true;
+                                                                            document.querySelector('.info-note').value = data.request.note;
+                                                                            document.querySelector('.info-file').href = data.request.file_path;
+
+                                                                            appendCategories(data.categories, data.positions, document, document.querySelectorAll('.category-list'));
+
+                                                                            // getTotalPrice();
+
+                                                                            function getTotalPrice() {
+                                                                                let count_r = document.querySelectorAll('.req-pos-count_r');
+                                                                                let price = document.querySelectorAll('.req-pos-price');
+                                                                                let total_price = 0;
+
+                                                                                for (let i = 0; i < price.length; i++) {
+                                                                                    // total_price += count_r[i].value * price[i].value;
+
+                                                                                    count_r[i].addEventListener('change', (e) => {
+                                                                                        total_price += Number(count_r[i].value) * Number(price[i].value);
+                                                                                        document.querySelector('.total_price').textContent = `${total_price} ₽`;
+                                                                                    });
+
+                                                                                    price[i].addEventListener('change', (e) => {
+                                                                                        total_price += Number(count_r[i].value) * Number(price[i].value);
+                                                                                        document.querySelector('.total_price').textContent = `${total_price} ₽`;
+                                                                                    });
+                                                                                }
+                                                                            }
+
+                                                                            function getFullName(responsible) {
+                                                                                let surname = responsible.surname[0].toUpperCase() + responsible.surname.substr(1, responsible.surname.length - 1);
+                                                                                let name = responsible.name[0].toUpperCase() + responsible.name.substr(1, responsible.name.length - 1);
+                                                                                let patronymic = responsible.patronymic[0].toUpperCase() + responsible.patronymic.substr(1, responsible.patronymic.length - 1);
+                                                                                return `${surname} ${name} ${patronymic}`;
+                                                                            }
+
+                                                                            function getStatusIndex(req_status) {
+                                                                                const statuses = ['новая', 'введена', 'готова'];
+                                                                                let req_index = 0;
+
+                                                                                statuses.forEach((status, index) => {
+                                                                                    if (req_status == status) req_index = index;
+                                                                                });
+
+                                                                                return req_index;
+                                                                            }
+
+                                                                            //все категории(из базы), текущая категория, объект document, список select`ов в заявке
+                                                                            function appendCategories(categories, current_category, document, list) {
+                                                                                // console.log(current_category)
+                                                                                list.forEach((select, index) => {
+                                                                                    categories.forEach((category, idx) => {
+                                                                                        select.append(new Option(category, idx + 1));
+                                                                                    });
+                                                                                });
+
+                                                                                list.forEach((select, index) => {
+                                                                                    for (let i = 0; i < select.children.length; i++) {
+                                                                                        if (current_category[index].category == select.children[i].text) select[i].selected = true;
+                                                                                    }
+                                                                                });
+                                                                            }
+
+                                                                            function correctData(number) {
+                                                                                let float = `${number.toFixed(2)}`.split('.')[1];
+
+                                                                                if (Number(number) < 1000) return number;
+
+                                                                                let ost = 0; //  остаток
+                                                                                let thousands = 0; //  тысячи
+                                                                                let millions = 0; //  миллионы
+
+                                                                                if (parseInt(number) > 1000 && parseInt(number) < Math.pow(10, 6)) {
+                                                                                    thousands = parseInt(number / 1000);
+                                                                                    ost = parseInt(number - thousands * 1000);
+                                                                                    return `${thousands} ${correctReturn(ost) + ', ' + float}`;
+                                                                                }
+
+                                                                                if (parseInt(number) > Math.pow(10, 6)) {
+                                                                                    millions = parseInt(number / Math.pow(10, 6));
+                                                                                    thousands = parseInt(number / 1000 % 1000);
+                                                                                    ost = parseInt(number - millions * Math.pow(10, 6) - thousands * 1000);
+                                                                                    return `${millions} ${correctReturn(thousands)} ${correctReturn(ost) + ', ' + float}`;
+                                                                                }
+
+                                                                                function correctReturn(number) {
+                                                                                    if (Number(number) < 10) return '00' + number;
+                                                                                    if (Number(number) >= 10 && Number(number) < 100) return '0' + number;
+                                                                                    else return number;
+                                                                                }
+                                                                            }
+                                                                        });
+
+                                                                    edit.style.transform = 'rotate(-90deg)'; //  поворот logo на 90deg
+                                                                    document.querySelector('.modal').style.display = 'block'; //  показ детализации
+
+                                                                    document.querySelector('#cancel-btn').addEventListener('click', () => {
+                                                                        let pos = document.querySelector('.table-detailing');
+
+                                                                        for (let i = 1; i < pos.childElementCount; i++) {
+                                                                            pos.children[i].remove();
+                                                                        }
+
+                                                                        document.querySelector('.modal').style.display = 'none';
+                                                                        edit.style.transform = 'rotate(0deg)';
+                                                                    });
+                                                                }
+                                                            }
+                                                        });
+                                                    });
+                                                });
+
+                                                function sendReqPosForUpdate() {
+                                                    let detailing = document.querySelector('.table-detailing');
+
+                                                    let data = {
+                                                        reg_number: document.querySelector('.info-number').value,
+                                                        status: document.querySelector('.info-status').options[document.querySelector('.info-status').options.selectedIndex].value,
+                                                        note: document.querySelector('.info-note').value,
+                                                        positions: []
+                                                    };
+
+                                                    let company = document.querySelectorAll('.req-pos-company');
+                                                    let model = document.querySelectorAll('.req-pos-model');
+                                                    let count = document.querySelectorAll('.req-pos-count');
+                                                    let count_r = document.querySelectorAll('.req-pos-count_r');
+                                                    let price = document.querySelectorAll('.req-pos-price');
+
+                                                    //  ПРОВЕРКА НА 0 (0 - не число по мнению js)
+
+                                                    let error = false;
+
+                                                    for (let i = 0; i < count.length; i++) {
+                                                        if (count[i].value == 0) {
+                                                            alert('Поле: "Количество"\nОшибка: величина поля должна быть больше 0!');
+                                                            return;
+                                                        }
+
+                                                        if (!count[i].value.match(/[0-9]/)) {
+                                                            alert('Поле: "Количество"\nОшибка: величина поля должна быть числом!');
+                                                            return;
+                                                        }
+
+                                                        if (!count_r[i].value.match(/[0-9]/)) {
+                                                            alert('Поле: "Количество утв."\nОшибка: величина поля должна быть числом!');
+                                                            return;
+                                                        }
+
+                                                        if (parseInt(count_r[i].value) > parseInt(count[i].value)) {
+                                                            alert('Поле: "Количество"\nОшибка: величина поля не может быть меньше величины поля "Количество утв."!');
+                                                            return;
+                                                        }
+
+                                                        if (company[i].value.trim() == '') {
+                                                            alert('Поле: "Наименование"\nОшибка: поле не может быть пустым!');
+                                                            return;
+                                                        }
+
+                                                        if (model[i].value.trim() == '') {
+                                                            alert('Поле: "Модель"\nОшибка: поле не может быть пустым!');
+                                                            return;
+                                                        }
+
+                                                        if (!parseInt(count[i].value)) {
+                                                            alert('Поле: "Количество"\nОшибка: величина поля должна быть числом!');
+                                                            return;
+                                                        }
+
+                                                        if (parseInt(count[i].value) < 0) {
+                                                            alert('Поле: "Количество"\nОшибка: величина поля не может быть отрицательной!');
+                                                            return;
+                                                        }
+
+                                                        if (parseInt(count_r[i].value) < 0) {
+                                                            alert('Поле: "Количество утв."\nОшибка: величина поля не может быть отрицательной!');
+                                                            return;
+                                                        }
+
+                                                        if (count_r[i].value.trim() == '') {
+                                                            alert('Поле: "Количество утв."\nОшибка: поле не может быть пустым!');
+                                                            return;
+                                                        }
+
+                                                        if (!parseInt(price[i].value)) {
+                                                            alert('Поле: "Цена"\nОшибка: величина поля должна быть числом!');
+                                                            return;
+                                                        }
+
+                                                        if (parseInt(price[i].value) < 0) {
+                                                            alert('Поле: "Цена"\nОшибка: величина поля не может быть отрицательной!');
+                                                            return;
+                                                        }
+                                                    }
+
+                                                    for (let i = 1; i < detailing.children.length - 1; i++) {
+                                                        let position = {
+                                                            id: detailing.children[i].children[0].children[0].children[0].id,
+                                                            company: detailing.children[i].children[0].children[1].children[0].value,
+                                                            model: detailing.children[i].children[0].children[2].children[0].value,
+                                                            version: detailing.children[i].children[0].children[3].children[0].value,
+                                                            count: detailing.children[i].children[0].children[4].children[0].value,
+                                                            count_r: detailing.children[i].children[0].children[5].children[0].value,
+                                                            price: detailing.children[i].children[0].children[6].children[0].value.replace(',', '.'),
+                                                            category: detailing.children[i].children[0].children[7].children[0].options[detailing.children[i].children[0].children[7].children[0].options.selectedIndex].value,
+                                                            note: detailing.children[i].children[0].children[8].children[0].value,
+                                                            refusal: detailing.children[i].children[0].children[9].children[0].checked
+                                                        };
+
+                                                        data.positions.push(position);
+                                                    }
+
+                                                    fetch('/update-req-pos', {
+                                                        method: 'post',
+                                                        headers: {
+                                                            'Content-Type': 'application/json;charset=utf-8'
+                                                        },
+                                                        body: JSON.stringify(data)
+                                                    });
+
+                                                    setTimeout(() => {
+                                                        location.reload();
+                                                    }, 1000);
+                                                }
+
+                                                function deleteRequest() {
+                                                    if (confirm('Вы уверены?')) {
+                                                        let data = {
+                                                            reg_number: document.querySelector('.info-number').value
+                                                        };
+
+                                                        fetch('/delete-request', {
+                                                            method: 'post',
+                                                            headers: {
+                                                                'Content-Type': 'application/json;charset=utf-8'
+                                                            },
+                                                            body: JSON.stringify(data)
+                                                        });
+
+                                                        setTimeout(() => {
+                                                            location.reload();
+                                                        }, 1000);
+                                                    } else return;
+                                                }
+                                            </script>
+
+                                            <script src="../js/table2excel.js"></script>
+                                            <script src="../js/admin.js"></script>
+</body>
+
+</html>

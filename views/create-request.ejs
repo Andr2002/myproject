@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создание заявки</title>
+
+    <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../css/create-request.css">
+</head>
+
+<body>
+    <!-- link назад все заявки > создание заявки -->
+    <!-- <p>
+        <a href="/"></a>
+    </p> -->
+
+
+    <form action="/create-request" method="post" name="create-form" enctype="multipart/form-data">
+        <div class="input-number">
+            <label for="number">Номер</label>
+            <input type="text" name="number" required>
+        </div>
+
+        <div class="input-year">
+            <label for="year">Год приобретения</label>
+            <select name="year" id="">
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+            </select>
+        </div>
+
+        <select name="type" id="">
+            <option value="плановая">Плановая</option>
+            <option value="внеплановая">Внеплановая</option>
+        </select>
+
+        <div class="input-date">
+            <label for="date">Дата составления документа(ЕОСДО)</label>
+            <input type="date" name="date" required>
+        </div>
+
+        <div class="input-file">
+            <label for="file">Скан документа</label>
+            <input type="file" name="file" required>
+        </div>
+
+        <div class="input-note">
+            <label for="note">Примечание</label>
+            <input type="text" name="note">
+        </div>
+
+        <button type="button" class="add-position">Добавить позицию</button>
+
+        <div class="positions">
+            <!-- pattern -->
+            <div class="position">
+                <input type="text" value="1" disabled>
+                <input type="text" placeholder="Производитель" name="company" required>
+                <input type="text" placeholder="Модель" name="model" required>
+                <input type="text" placeholder="Версия" name="version">
+                <input type="text" placeholder="Количество" name="count" required>
+                <input type="text" placeholder="Цена" name="price">
+
+                <select name="category" id="" class="select-positions">
+                    <option value="0">Не выбрано</option>
+                </select>
+
+                <input type="text" placeholder="Примечание" name="position_note">
+            </div>
+        </div>
+
+        <input type="submit" value="Создать">
+    </form>
+
+    <div class="back">
+        <a href="/back">Назад</a>
+    </div>
+
+    <script src="../js/client.js"></script>
+</body>
+
+</html>

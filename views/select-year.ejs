@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Все заявки</title>
+
+    <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../css/select-year.css">
+</head>
+
+<body>
+    <div class="user-modal">
+        <div class="user-profile">
+            <img src="../img/close-logo.png" alt="close-logo" class="close-logo" draggable="false" title="Закрыть окно профиля">
+
+            <img src="../img/<%= user.role %>-logo.png" alt="<%= user.role %>-logo" class="profile-logo" draggable="false">
+
+            <p class="profile-info">Роль: <span><%= correctRole(user.role) %></span></p>
+
+            <p class="profile-info">Фамилия: <span><%= correctOutput(user.surname) %></span></p>
+
+            <p class="profile-info">Имя: <span><%= correctOutput(user.name) %></span></p>
+
+            <p class="profile-info">Отчество: <span><%= correctOutput(user.patronymic) %></span></p>
+
+            <p class="profile-info">Должность: <span><%= user.post %></span></p>
+
+            <p class="profile-info">Подразделение: <span><%= user.dept.full_name %></span></p>
+
+            <p class="profile-info">Телефон: <span><%= user.phone %></span></p>
+
+            <p class="profile-info">Электронная почта: <span><%= user.email%></span></p>
+
+            <button class="profile-exit-btn" title="Выйти из системы">Выйти из системы</button>
+        </div>
+    </div>
+
+    <div class="user-info">
+        <div class="user-title">
+            <img src="../img/<%= user.role %>-logo.png" alt="<%= user.role %>-logo" class="user-logo" draggable="false" title="Информация о профиле">
+
+            <span class="user-name"><%= correctOutput(user.surname) + ' ' + correctOutput(user.name) + ' ' + correctOutput(user.patronymic) %></span>
+        </div>
+
+        <button class="exit-btn" title="Выйти из системы">Выйти из системы</button>
+    </div>
+
+    <div class="admin-year">
+        <form action="/get-session-id" type="post">
+            <select name="year" id="" class="select-year">
+                    <option value="2023">2023</option>
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>
+                    <option value="2026">2026</option>
+                    <option value="2027">2027</option>
+                    <option value="2028">2028</option>
+                    <option value="2029">2029</option>
+                    <option value="2030">2030</option>
+                </select>
+
+            <button type="submit" class="show-btn" title="Показать заявки">Показать</button>
+        </form>
+    </div>
+
+    <button class="create-btn" title="Создать заявку">Создать</button>
+
+    <!-- функция для корректного отображения роли -->
+    <% function correctRole(role) { %>
+        <% if(role == 'admin') return 'Администратор'; %>
+            <% return 'Пользователь'; %>
+                <% } %>
+
+                    <!-- функция для корректного отображения слов с заглавной буквы -->
+                    <% function correctOutput(word) { %>
+                        <% return word[0].toUpperCase() + word.substr(1, word.length-1); %>
+                            <% } %>
+
+                                <script src="../js/select-year.js"></script>
+
+</body>
+
+</html>
