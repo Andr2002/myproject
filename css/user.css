@@ -1,0 +1,222 @@
+@font-face {
+    font-family: "Noto";
+    src: url("../fonts/NotoSerif-Regular.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: #0b0fe7 #c0cccc;
+    font-family: 'Noto';
+}
+
+body {
+    background: url(../img/background.jpg);
+    background-size: 100%;
+}
+
+table {
+    font-family: "Noto";
+    font-size: 15px;
+    border-collapse: collapse;
+    text-align: center;
+    margin: auto;
+}
+
+table caption {
+    margin-bottom: 17px;
+    font-size: 17px;
+    /* display: table;
+    width: auto;
+    margin: 15px auto; */
+    letter-spacing: 2px;
+}
+
+th {
+    background: #6498ff;
+    color: rgb(255, 255, 255);
+    padding: 10px 20px;
+    text-shadow: 1px 1px 1px #000;
+    letter-spacing: 2px;
+    /* font-weight: 500; */
+}
+
+th,
+td {
+    padding: 13px;
+    border-style: solid;
+    border-width: 0 1px 1px 0;
+    border-color: white;
+}
+
+td {
+    background: #bdd9f4;
+}
+
+
+/* profile */
+
+.user-info {
+    display: block;
+    width: 100%;
+    height: 8em;
+}
+
+.user-title {
+    position: relative;
+    top: 1em;
+    display: flex;
+    align-items: center;
+    width: 22em;
+    margin-left: auto;
+}
+
+.user-logo {
+    display: block;
+    width: 4em;
+    height: 4em;
+    cursor: pointer;
+}
+
+.user-name {
+    display: block;
+    font-size: 1em;
+    margin-left: 0.7em;
+}
+
+.create-btn {
+    display: block;
+    margin: auto;
+    margin-top: 5rem;
+    width: 8rem;
+    height: 3rem;
+    border: 1px solid grey;
+    border-radius: 12px;
+    background-color: #36ff4d;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 1em;
+    letter-spacing: 1.3px;
+}
+
+.create-btn:hover {
+    background-color: white;
+    border: 1px solid #0b0fe7;
+    box-shadow: 10px 10px 5px #36ff4d;
+}
+
+.exit-btn {
+    display: block;
+    margin-left: auto;
+    margin-right: 2em;
+    font-size: 1em;
+    background-color: #FF2400;
+    transition: 0.3s;
+    cursor: pointer;
+    color: white;
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 12em;
+    height: 2em;
+    margin-top: 1em;
+}
+
+.exit-btn:hover {
+    background-color: white;
+    color: black;
+    border: 1px solid #0b0fe7;
+    box-shadow: 10px 10px 5px #FF2400;
+}
+
+.user-modal {
+    position: absolute;
+    display: none;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    align-items: center;
+    z-index: 2;
+}
+
+.user-profile {
+    position: relative;
+    display: block;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    margin: auto;
+    top: 10%;
+    width: 35%;
+    height: 80%;
+    border: 1px solid black;
+    border-radius: 20px;
+    background-color: #ffffff;
+    overflow: auto;
+}
+
+.profile-logo {
+    display: block;
+    width: 6em;
+    height: 6em;
+    margin: auto;
+    margin-top: 1.5em;
+}
+
+.profile-info {
+    display: block;
+    margin-left: 1em;
+    margin-bottom: 1em;
+}
+
+.profile-exit-btn {
+    display: block;
+    margin: auto;
+    margin-top: 3em;
+    font-size: 1em;
+    background-color: #FF2400;
+    transition: 0.3s;
+    cursor: pointer;
+    color: white;
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 12em;
+    height: 2em;
+}
+
+.profile-exit-btn:hover {
+    background-color: white;
+    color: black;
+    border: 1px solid #0b0fe7;
+    box-shadow: 10px 10px 5px #FF2400;
+}
+
+.close-logo {
+    display: block;
+    cursor: pointer;
+    width: 2em;
+    height: 2em;
+    margin-left: auto;
+    margin-right: 0.5em;
+    margin-top: 0.5em;
+}
+
+.not-request {
+    display: block;
+    text-align: center;
+    margin-top: 5em;
+}
+
+.not-request h1 {
+    display: block;
+    margin-bottom: 0.7em;
+}
+
+.not-request img {
+    display: block;
+    margin: auto;
+    width: 5em;
+    height: 5em;
+}

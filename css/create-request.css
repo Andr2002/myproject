@@ -1,0 +1,36 @@
+@font-face {
+    font-family: "Noto";
+    src: url("../fonts/NotoSerif-Regular.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: #0b0fe7 #c0cccc;
+    font-family: 'Noto';
+}
+
+form {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    /* justify-content: center; */
+    /* margin: auto; */
+}
+
+form>div {
+    display: block;
+    margin-left: 10px;
+    margin-bottom: 15px;
+    margin-top: 5px;
+}
+
+.position {
+    display: block;
+    margin-bottom: 15px;
+}

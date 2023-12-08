@@ -1,0 +1,228 @@
+@font-face {
+    font-family: "Noto";
+    src: url("../fonts/NotoSerif-Regular.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: #0b0fe7 #c0cccc;
+    font-family: 'Noto';
+}
+
+body {
+    background: url(../img/background.jpg);
+    background-size: 100%;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.admin-year {
+    display: block;
+    position: relative;
+    top: 5rem;
+    text-align: center;
+}
+
+.admin-year select {
+    color: #0b0fe7;
+    background-color: #fff;
+    width: 6em;
+    height: 2em;
+    text-align: center;
+    font-size: 1em;
+    letter-spacing: 2px;
+    border: 1px solid #0b0fe7;
+    cursor: pointer;
+}
+
+.admin-year select option {
+    color: #0b0fe7;
+    text-align: center;
+    font-size: 1.1em;
+    background: white;
+}
+
+.show-btn {
+    width: 7em;
+    height: 2.5em;
+    text-align: center;
+    font-size: inherit;
+    letter-spacing: 1px;
+    color: #fff;
+    background-color: #5188f6;
+    cursor: pointer;
+    border: 1px solid grey;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.show-btn:hover {
+    color: #0b0fe7;
+    background-color: white;
+    border: 1px solid #6498ff;
+    box-shadow: 10px 10px 5px #6498ff;
+}
+
+.show-btn:focus {
+    color: white;
+    background-color: #6498ff;
+    border: 1px solid white;
+    transition: 0.2s;
+}
+
+
+/* profile */
+
+.user-info {
+    display: block;
+    width: 100%;
+    height: 8em;
+}
+
+.user-title {
+    position: relative;
+    top: 1em;
+    display: flex;
+    align-items: center;
+    width: 22em;
+    margin-left: auto;
+    /* margin-top: 1em; */
+}
+
+.user-logo {
+    display: block;
+    width: 4em;
+    height: 4em;
+    cursor: pointer;
+}
+
+.user-name {
+    display: block;
+    width: 100%;
+    font-size: 1em;
+    margin-left: 0.7em;
+}
+
+.create-btn {
+    position: relative;
+    display: block;
+    margin: auto;
+    top: 15rem;
+    width: 8em;
+    height: 3em;
+    border: 1px solid grey;
+    border-radius: 12px;
+    background-color: #36ff4d;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 1em;
+    letter-spacing: 1.3px;
+}
+
+.create-btn:hover {
+    background-color: white;
+    border: 1px solid #0b0fe7;
+    box-shadow: 10px 10px 5px #36ff4d;
+}
+
+.exit-btn {
+    display: block;
+    margin-left: auto;
+    margin-right: 2em;
+    font-size: 1em;
+    background-color: #FF2400;
+    transition: 0.3s;
+    cursor: pointer;
+    color: white;
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 12em;
+    height: 2em;
+    margin-top: 1em;
+}
+
+.exit-btn:hover {
+    background-color: white;
+    color: black;
+    border: 1px solid #0b0fe7;
+    box-shadow: 10px 10px 5px #FF2400;
+}
+
+.user-modal {
+    position: absolute;
+    display: none;
+    width: 100%;
+    height: 110%;
+    background-color: rgba(0, 0, 0, 0.7);
+    align-items: center;
+    z-index: 2;
+}
+
+.user-profile {
+    position: relative;
+    display: block;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    margin: auto;
+    top: 10%;
+    width: 35%;
+    height: 80%;
+    border: 1px solid black;
+    border-radius: 20px;
+    background-color: #ffffff;
+    overflow: auto;
+}
+
+.profile-logo {
+    display: block;
+    width: 6em;
+    height: 6em;
+    margin: auto;
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.profile-info {
+    display: block;
+    margin-left: 1em;
+    margin-bottom: 1em;
+}
+
+.profile-exit-btn {
+    display: block;
+    margin: auto;
+    margin-top: 4em;
+    font-size: 1em;
+    background-color: #FF2400;
+    transition: 0.3s;
+    cursor: pointer;
+    color: white;
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 12em;
+    height: 2em;
+}
+
+.profile-exit-btn:hover {
+    background-color: white;
+    color: black;
+    border: 1px solid #0b0fe7;
+    box-shadow: 10px 10px 5px #FF2400;
+}
+
+.close-logo {
+    position: absolute;
+    cursor: pointer;
+    top: 1.5%;
+    right: 1.5%;
+    width: 2em;
+    height: 2em;
+}
